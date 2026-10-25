@@ -1,19 +1,20 @@
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createApp, type DirectiveBinding } from 'vue';
+import App from './App.vue';
+import router from './router';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const app = createApp(App);
 
-void createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
-    withApp: (app) => {
-        app.directive('focus', {
-            mounted: (el: HTMLElement, shouldFocus) => {
-                if (shouldFocus.value !== false) {
-                    el.focus();
-                }
-            },
-        });
-    },
-    progress: {
-        color: '#4B5563',
+app.directive('focus', {
+    mounted(
+        el: HTMLElement,
+        binding: DirectiveBinding<boolean | undefined>
+    ) {
+        if (binding.value !== false) {
+            el.focus();
+        }
     },
 });
+
+app.use(router);
+
+app.mount('#app');
